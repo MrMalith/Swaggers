@@ -1,0 +1,161 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "description": "Edu App Service",
+    "version": "1.0.0",
+    "title": "Student API"
+  },
+  "servers": [
+      {
+          "url": "https://eduapp.azurewebsites.net/api/students"
+      }
+  ],
+  "paths": {
+    "/{classid}/new": {
+      "post": {
+        "x-zen-trigger": "Mail Received",
+        "summary": "Hook reg students",
+        "description": "",
+        "operationId": "studentRegHook",
+        "requestBody": {
+            "required": true,
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/StudentRequest"
+                    }
+                }
+            }
+        },
+        "parameters":{
+          "in":"body",
+          "description":"student obj",
+          "required":"true",
+          "schema":{
+            "$ref": "#/components/schemas/StudentRequest"            
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{classid}": {
+      "get": {
+        "tags": [
+          "Student"
+        ],
+        "summary": "Get mail",
+        "description": "",
+        "operationId": "getMail",
+        "parameters": [
+          {
+            "name": "classid",
+            "in": "path",
+            "description": "Student ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Body": {
+                      "type": "object",
+                      "properties": {
+                        "ContentType": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+      "schemas": {
+          "student": {
+              "type": "object",
+              "required": [
+                "FirstName",
+                "ContactNumber"
+              ],
+              "properties": {
+                "Student": {
+                  "type": "object",
+                  "title": "The Student Schema",
+                  "required": [
+                    "FirstName",
+                    "ContactNumber"
+                  ],
+                  "properties": {
+                    "First_Name": {
+                      "type": "string",
+                      "default": "Malith"
+                    },
+                    "Last_Name": {
+                      "type": "string",
+                      "default": "Samarasighe"
+                    },
+                    "DateOfBirth": {
+                      "type": "string",
+                      "default": "27/08/2020"
+                    },
+                    "Address": {
+                      "type": "string",
+                      "default": "Malith"
+                    },
+                    "Contact_Number": {
+                      "type": "number",
+                      "default": "0715426547"
+                    }
+                  }
+                }
+              }
+            },
+            "StudentRequest": {
+              "type": "object",
+              "required": [
+                "@odata.type",
+                "Resource",
+                "NotificationURL",
+                "ChangeType",
+                "ClientState"
+              ]
+            },
+            "StudentResponse": {
+              "type": "object",
+              "properties": {
+                "Id": {
+                  "type": "string"
+                }
+              }
+            }
+      }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
